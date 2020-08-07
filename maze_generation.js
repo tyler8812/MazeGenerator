@@ -7,6 +7,7 @@ var grid = [];
 var current;
 
 var stack = [];
+var path = [];
 
 function setup() {
     createCanvas(400, 400);
@@ -33,24 +34,27 @@ function draw() {
         next.visted = true;
 
         stack.push(current);
-
         removeWalls(current, next);
         current = next;
         if(current.i == rows-1 && current.j == cols-1){
-            stack.push(current);
-            noFill();
-            stroke(0, 255, 123);
-            strokeWeight(w/4);
-            beginShape();
             for (let i = 0; i < stack.length; i++) {
-                vertex(stack[i].i * w + w / 2, stack[i].j * w + w / 2);
+                path.push(stack[i]);   
             }
-            endShape();
-            noLoop();
+            path.push(current);
         }
         current.highlight();
     } else if (stack.length > 0) {
         current = stack.pop();
+    }else{
+        noFill();
+        stroke(0, 255, 123);
+        strokeWeight(w/4);
+        beginShape();
+        for (let i = 0; i < path.length; i++) {
+            vertex(path[i].i * w + w / 2, path[i].j * w + w / 2);
+        }
+        endShape();
+        noLoop();
     }
 }
 function index(i, j) {
